@@ -1,0 +1,13 @@
+service: build-my-frontend
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: build.my
+    distributionFolder: build

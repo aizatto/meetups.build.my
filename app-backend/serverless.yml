@@ -1,0 +1,220 @@
+service:
+  name: build-my-backend
+
+plugins:
+  - serverless-webpack
+  - serverless-domain-manager
+  - serverless-dynamodb-local
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ap-southeast-1
+  memorySize: 256
+  timeout: 60
+  environment:
+    DOMAIN_NAME: ${file(./secrets.json):${opt:stage}.DOMAIN_NAME}
+    ORGANIZATIONS_TABLE: build-my-${opt:stage}-organizations
+    ORGANIZATIONS_SOURCE_INDEX: build-my-${opt:stage}-organizations-source
+    EVENTS_TABLE: build-my-${opt:stage}-events
+    EVENTS_STATUS_INDEX: build-my-${opt:stage}-events-status
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: 
+        - { "Fn::GetAtt": ["organizationsTable", "Arn" ] }
+        - "Fn::Join":
+          - "/"
+          - - { "Fn::GetAtt": ["organizationsTable", "Arn" ] }
+            - "index"
+            - ${self:provider.environment.ORGANIZATIONS_SOURCE_INDEX}
+        - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
+        - "Fn::Join":
+          - "/"
+          - - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
+            - "index"
+            - ${self:provider.environment.EVENTS_STATUS_INDEX}
+
+functions:
+  facebookEvent:
+    handler: src/handler.facebookEvent
+  meetupOrganization:
+    handler: src/handler.meetupOrganization
+  meetupAllOrganizations:
+    handler: src/handler.meetupAllOrganizations
+    events:
+      - schedule:
+          rate: rate(12 hours)
+  expressHandler:
+    handler: src/handler.expressHandler
+    events:
+      - http:
+          path: graphql
+          method: get
+      - http:
+          path: graphql
+          method: post
+  updateEventsUpcomingToPast:
+    handler: src/custom.updateEventsUpcomingToPast
+    events:
+      - schedule:
+          rate: rate(12 hours)
+  createEvent:
+    handler: src/custom.createEvent
+
+resources:
+  Resources:
+    # https://github.com/serverless/serverless/issues/2445#issuecomment-333016523
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:service}-${opt:stage}
+    ProxyResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        ParentId:
+          Fn::GetAtt:
+            - ApiGatewayRestApi
+            - RootResourceId
+        PathPart: '{proxy+}'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+    ProxyMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        ResourceId:
+          Ref: ProxyResource
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        HttpMethod: GET
+        MethodResponses:
+          - StatusCode: 200
+        RequestParameters:
+          method.request.path.proxy: true
+        AuthorizationType: NONE
+        Integration:
+          IntegrationHttpMethod: GET
+          Type: HTTP_PROXY
+          Uri: 'http://build.my.s3-website-us-east-1.amazonaws.com/{proxy}'
+          PassthroughBehavior: WHEN_NO_MATCH
+          IntegrationResponses:
+            - StatusCode: 200
+          RequestParameters:
+            integration.request.path.proxy: 'method.request.path.proxy'
+    RootMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        ResourceId:
+          Fn::GetAtt:
+            - ApiGatewayRestApi
+            - RootResourceId
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        HttpMethod: GET
+        MethodResponses:
+          - StatusCode: 200
+        RequestParameters:
+          method.request.path.proxy: true
+        AuthorizationType: NONE
+        Integration:
+          IntegrationHttpMethod: GET
+          Type: HTTP_PROXY
+          Uri: 'http://build.my.s3-website-us-east-1.amazonaws.com/'
+          PassthroughBehavior: WHEN_NO_MATCH
+          IntegrationResponses:
+            - StatusCode: 200
+    # Organizations
+    organizationsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.ORGANIZATIONS_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+          -
+            AttributeName: source
+            AttributeType: S
+          -
+            AttributeName: name
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+          -
+            AttributeName: name
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.ORGANIZATIONS_SOURCE_INDEX}
+            KeySchema:
+              - 
+                AttributeName: source
+                KeyType: HASH
+              -
+                AttributeName: name
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+
+    # Events
+    eventsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.EVENTS_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+          -
+            AttributeName: status
+            AttributeType: S
+          -
+            AttributeName: end_time
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.EVENTS_STATUS_INDEX}
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: end_time
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+
+custom:
+  dynamodb:
+    start:
+      migrate: true
+      seed: true
+      inMemory: false
+      dbPath: ${env:PWD}/.dynamodb
+    seed:
+      meetup: # This key name is irrelevant
+        sources:
+          -
+            table: ${self:provider.environment.ORGANIZATIONS_TABLE}
+            sources: [./seed/organizations.json]
+            custom:
+  customDomain:
+    domainName: ${self:provider.environment.DOMAIN_NAME}
+    basePath: ${file(./secrets.json):${opt:stage}.BASE_PATH, 'false'}
+    stage: ${opt:stage}
+    createRoute53Record: true
+    enabled: ${file(./secrets.json):${opt:stage}.CUSTOM_DOMAIN_ENABLED, 'false'}
+  serverless-offline:
+    port: 3001

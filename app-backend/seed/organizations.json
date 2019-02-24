@@ -1,0 +1,79 @@
+[
+  {
+    "id": "meetup:AI-Saturdays-KL",
+    "source": "meetup",
+    "meetup_id": "AI-Saturdays-KL",
+    "name": "AI Saturdays KL",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:Kuala-Lumpur-Artificial-Intelligence-Meetup",
+    "source": "meetup",
+    "meetup_id": "Kuala-Lumpur-Artificial-Intelligence-Meetup",
+    "name": "Kuala Lumpur Artificial Intelligence Meetup",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:Kuala-Lumpur-Analytics-Freelancers",
+    "source": "meetup",
+    "meetup_id": "Kuala-Lumpur-Analytics-Freelancers",
+    "name": "Kuala Lumpur Analytics Freelancers",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:Malaysia-Cryptocurrency-Meetup",
+    "source": "meetup",
+    "meetup_id": "Malaysia-Cryptocurrency-Meetup",
+    "name": "Malaysia Cryptocurrency Meetup",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:Malaysia-Kubernetes-Meetup",
+    "source": "meetup",
+    "meetup_id": "Malaysia-Kubernetes-Meetup",
+    "name": "Malaysia Kubernetes Meetup",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:Malaysia-Mobile-NET-Developers-Group",
+    "source": "meetup",
+    "meetup_id": "Malaysia-Mobile-NET-Developers-Group",
+    "name": "Malaysia Mobile NET Developers Group",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:meetup-agile-malaysia",
+    "source": "meetup",
+    "meetup_id": "meetup-agile-malaysia",
+    "name": "meetup agile malaysia",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:ruby-malaysia",
+    "source": "meetup",
+    "meetup_id": "ruby-malaysia",
+    "name": "ruby malaysia",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:blockchain-developers-malaysia",
+    "source": "meetup",
+    "meetup_id": "blockchain-developers-malaysia",
+    "name": "blockchain developers malaysia",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:DevOpsMalaysia",
+    "source": "meetup",
+    "meetup_id": "DevOpsMalaysia",
+    "name": "DevOps Malaysia",
+    "region": "kl"
+  },
+  {
+    "id": "meetup:Junior-Developers-Malaysia",
+    "source": "meetup",
+    "meetup_id": "Junior-Developers-Malaysia",
+    "name": "Junior Developers Malaysia",
+    "region": "kl"
+  }
+]

@@ -1,0 +1,84 @@
+type Event {
+  # The ID of an object
+  id: ID!
+  name: String!
+  description: String
+  start_time: String!
+  end_time: String!
+  venue: String
+  place: String
+  city: String
+  country: String
+  link: String
+}
+
+# A connection to a list of items.
+type EventConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [EventEdge]
+  totalCount: Int!
+}
+
+# An edge in a connection.
+type EventEdge {
+  # The item at the end of the edge
+  node: Event
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Organization {
+  # The ID of an object
+  id: ID!
+  name: String!
+  link: String!
+}
+
+# A connection to a list of items.
+type OrganizationConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [OrganizationEdge]
+  totalCount: Int!
+}
+
+# An edge in a connection.
+type OrganizationEdge {
+  # The item at the end of the edge
+  node: Organization
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Query {
+  events(after: String, first: Int, before: String, last: Int): EventConnection
+  organizations(after: String, first: Int, before: String, last: Int): OrganizationConnection
+  viewer: Viewer
+}
+
+type Viewer {
+  events(after: String, first: Int, before: String, last: Int): EventConnection
+  organizations(after: String, first: Int, before: String, last: Int): OrganizationConnection
+}

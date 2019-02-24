@@ -1,0 +1,13 @@
+{
+  "name": "deepthoughtapp.com",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "devDependencies": {
+    "express": "^4.16.4",
+    "http-proxy-middleware": "^0.17.4"
+  },
+  "dependencies": {}
+}

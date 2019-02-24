@@ -1,0 +1,35 @@
+{
+  "name": "cloudwatch-events",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "fb": "^2.0.0",
+    "global": "^4.3.2",
+    "graphql": "^14.1.1",
+    "graphql-relay": "^0.6.0",
+    "node-fetch": "^2.3.0",
+    "serverless": "^1.38.0",
+    "serverless-domain-manager": "^2.6.13",
+    "serverless-http": "^1.9.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^8.0.57",
+    "serverless-dynamodb-local": "0.2.30",
+    "serverless-offline": "^4.5.0",
+    "serverless-webpack": "^5.1.1",
+    "source-map-support": "^0.5.6",
+    "ts-loader": "^4.2.0",
+    "typescript": "^2.9.2",
+    "webpack": "^4.5.0"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
+}
