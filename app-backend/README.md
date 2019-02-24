@@ -22,6 +22,6 @@ SLS_DEBUG=* sls deploy --stage dev --region ap-southeast-1
 https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html
 
 ```sh
-aws lambda invoke --function-name build-my-backend-prod-meetupAllOrganizations tmp.log
-aws lambda invoke --function-name build-my-backend-dev-facebookEvent --payload '{"body":"{\"id\":\"2202484380027712\",\"region\":\"kl\"}"}' tmp.log
+aws lambda invoke --function-name build-my-backend-prod-meetupAllOrganizations /dev/stdout
+aws lambda invoke --function-name build-my-backend-dev-facebookEvent --payload '{"body":"{\"id\":\"2202484380027712\",\"region\":\"kl\"}"}' /dev/stdout
 ```

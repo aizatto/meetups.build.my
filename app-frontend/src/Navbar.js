@@ -31,7 +31,7 @@ class Navbar extends Component {
   render() {
     return (
       <BootstrapNavbar color="dark" dark expand="md">
-        <NavbarBrand href="build.my">build.my</NavbarBrand>
+        <NavbarBrand href="https://build.my/">build.my</NavbarBrand>
         <NavbarToggler onClick={() => this.toggleNavbar()} />
         <Collapse isOpen={this.state.collapsed} navbar>
           <Nav className="ml-auto" navbar>
@@ -42,7 +42,7 @@ class Navbar extends Component {
               <NavLink href="https://www.deepthoughtapp.com/">Deep Thought</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/aizatto/timestamp-js">GitHub</NavLink>
+              <NavLink href="https://github.com/aizatto/build.my">GitHub</NavLink>
             </NavItem>
             <NavItem>
               <NavLink href="https://www.linkedin.com/in/aizatto">Linkedin</NavLink>
