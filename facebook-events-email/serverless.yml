@@ -1,0 +1,32 @@
+service:
+  name: facebook-events-email
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-1
+  memorySize: 128
+  timeout: 15
+  environment:
+    S3_BUCKET: ${file(./secrets.json):${opt:stage}.S3_BUCKET}
+    LAMBDA_ARN: ${cf.ap-southeast-1:build-my-backend-prod.CustomEventARN}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: ${self:provider.environment.LAMBDA_ARN}
+
+functions:
+  fromSES:
+    handler: handler.fromSES
+
+  parseMessageID:
+    handler: handler.parseMessageID

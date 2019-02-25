@@ -195,6 +195,13 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
+  Outputs:
+    CustomEventARN:
+      Description: The ARN for the createEvent Lambda
+      Value:
+        "Fn::GetAtt": [ CreateEventLambdaFunction, Arn ]
+      Export:
+        Name: ${self:service}:${opt:stage}:CustomEventARN
 
 custom:
   dynamodb:
