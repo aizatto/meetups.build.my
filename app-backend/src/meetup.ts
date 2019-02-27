@@ -106,8 +106,8 @@ export const createOrUpdateEventResponse = async ({ region }, event) => {
   return event;
 }
 
-export const fetchOrganizationEvents = async (meetup_id : string, region : string) => {
-  const response = await fetch(`https://api.meetup.com/${meetup_id}/events?scroll=future_or_past`);
+export const fetchOrganizationEvents = async (meetup_id : string, region : string, scroll = "future_or_past") => {
+  const response = await fetch(`https://api.meetup.com/${meetup_id}/events?scroll=${scroll}`);
   const json = await response.json();
 
   if (json.errors) {
@@ -136,8 +136,7 @@ export const fetchAll = async () => {
   
   const asyncs = groups.Items.map(async (group : IGroup) => {
     try {
-      await createOrUpdateOrganization(group.meetup_id, group.region);
-      return await fetchOrganizationEvents(group.meetup_id, group.region);
+      return await fetchOrganizationEvents(group.meetup_id, group.region, "next_upcoming");
     } catch (error) {
       console.error(error);
       return {};

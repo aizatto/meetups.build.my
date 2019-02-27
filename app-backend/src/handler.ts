@@ -7,6 +7,7 @@ import {
 import {
   fetchAll as fetchAllMeetupOrganizations,
   createOrUpdateOrganization as createOrUpdateMeetupOrganization,
+  fetchOrganizationEvents as fetchOrganizationMeetupEvents,
 } from './meetup.ts';
 import express from "express";
 import serverless from "serverless-http";
@@ -66,12 +67,14 @@ export const meetupAllOrganizations: APIGatewayProxyHandler = async (event : API
 
 export const meetupOrganization: APIGatewayProxyHandler = async (event : APIGatewayEvent) => {
   const data = JSON.parse(event.body);
-  const results = await createOrUpdateMeetupOrganization(data.id, data.region);
+  const meetup = await createOrUpdateMeetupOrganization(data.id, data.region);
+  const events = await fetchOrganizationMeetupEvents(data.id, data.region, "future_or_past");
   
   return {
     statusCode: 200,
     body: JSON.stringify({
-      results,
+      meetup,
+      events,
     }),
   };
 }
