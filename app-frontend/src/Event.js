@@ -10,7 +10,7 @@ class Event extends Component {
   render() {
     const event = this.props.event;
     return (
-      <Card key={event.id} className="mb-2 p-3">
+      <Card key={event.id} className="mb-2 p-3" data-id={atob(event.id).slice(6)}>
         <div>
           <a href={event.link} target="_blank" rel="noopener noreferrer">
             {event.name}
@@ -66,7 +66,6 @@ class Event extends Component {
     ];
     
     const comma_seperated_addresses = address.filter(add => add).join(', ');
-    console.log(comma_seperated_addresses);
 
     return (
       <div>

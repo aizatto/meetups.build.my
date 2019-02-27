@@ -16,6 +16,8 @@ export type Events_viewer = {|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
+        +start_time: string,
+        +end_time: string,
         +$fragmentRefs: Event_event$ref,
       |}
     |}>,
@@ -90,6 +92,20 @@ const node/*: ReaderFragment*/ = {
                   "storageKey": null
                 },
                 {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "start_time",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "end_time",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
                   "kind": "FragmentSpread",
                   "name": "Event_event",
                   "args": null
@@ -149,5 +165,5 @@ const node/*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = '5d307ad5e6b9c62a7225b6c9309d16a2';
+(node/*: any*/).hash = 'a7e33a76201be3e05a36d7dcd198b41c';
 module.exports = node;

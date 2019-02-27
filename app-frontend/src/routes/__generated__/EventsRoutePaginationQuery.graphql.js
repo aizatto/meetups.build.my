@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 58a0dd63c6921e8a5e2234fd8fe3fa75
+ * @relayHash e5162553538f2cc509c0b57c8ffc6ab0
  */
 
 /* eslint-disable */
@@ -41,6 +41,8 @@ fragment Events_viewer on Viewer {
     edges {
       node {
         id
+        start_time
+        end_time
         ...Event_event
         __typename
       }
@@ -168,7 +170,7 @@ return {
                       {
                         "kind": "ScalarField",
                         "alias": null,
-                        "name": "end_time",
+                        "name": "description",
                         "args": null,
                         "storageKey": null
                       },
@@ -182,21 +184,7 @@ return {
                       {
                         "kind": "ScalarField",
                         "alias": null,
-                        "name": "name",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "description",
-                        "args": null,
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "ScalarField",
-                        "alias": null,
-                        "name": "start_time",
+                        "name": "end_time",
                         "args": null,
                         "storageKey": null
                       },
@@ -204,6 +192,20 @@ return {
                         "kind": "ScalarField",
                         "alias": null,
                         "name": "link",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "name",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "start_time",
                         "args": null,
                         "storageKey": null
                       },
@@ -313,7 +315,7 @@ return {
     "operationKind": "query",
     "name": "EventsRoutePaginationQuery",
     "id": null,
-    "text": "query EventsRoutePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  viewer {\n    ...Events_viewer\n  }\n}\n\nfragment Events_viewer on Viewer {\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        ...Event_event\n        __typename\n      }\n      cursor\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment Event_event on Event {\n  id\n  link\n  name\n  description\n  start_time\n  end_time\n  venue\n  city\n  country\n  place\n}\n",
+    "text": "query EventsRoutePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  viewer {\n    ...Events_viewer\n  }\n}\n\nfragment Events_viewer on Viewer {\n  events(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        start_time\n        end_time\n        ...Event_event\n        __typename\n      }\n      cursor\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment Event_event on Event {\n  id\n  link\n  name\n  description\n  start_time\n  end_time\n  venue\n  city\n  country\n  place\n}\n",
     "metadata": {}
   }
 };
