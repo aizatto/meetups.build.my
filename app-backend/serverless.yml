@@ -50,7 +50,7 @@ functions:
     handler: src/handler.meetupAllOrganizations
     events:
       - schedule:
-          rate: rate(12 hours)
+          rate: cron(0 0 * * ? *)
   expressHandler:
     handler: src/handler.expressHandler
     events:
@@ -63,8 +63,10 @@ functions:
   updateEventsUpcomingToPast:
     handler: src/custom.updateEventsUpcomingToPast
     events:
+      # Goal is to do it in the morning MYT time,
+      # so that if you are looking at it past midnight it'll still be relevant
       - schedule:
-          rate: rate(12 hours)
+          rate: cron(0 0 * * ? *)
   createEvent:
     handler: src/custom.createEvent
 
@@ -216,7 +218,6 @@ custom:
           -
             table: ${self:provider.environment.ORGANIZATIONS_TABLE}
             sources: [./seed/organizations.json]
-            custom:
   customDomain:
     domainName: ${self:provider.environment.DOMAIN_NAME}
     basePath: ${file(./secrets.json):${opt:stage}.BASE_PATH, 'false'}
