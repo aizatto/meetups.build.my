@@ -10,7 +10,7 @@ class OrganizationsPagination extends React.Component {
     return (
       <div>
         <h1>
-          Organizations <small>({this.renderTotalCount()})</small>
+          Communities <small>({this.renderTotalCount()})</small>
         </h1>
         {this.renderOrganizations()}
       </div>
