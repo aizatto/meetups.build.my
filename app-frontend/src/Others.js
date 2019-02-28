@@ -29,6 +29,9 @@ class Others extends Component {
     );
     return (
       <div className="mt-2">
+        <div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSerefGCg2zhIYh_cxeSP-zTbWVmu1dJhp8c_ZEKR9shSmku9A/viewform?usp=sf_link">Suggest a Community or Event</a>
+        </div>
         Alternative Aggregators:
         <ul>{lis}</ul>
       </div>

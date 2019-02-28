@@ -17,11 +17,7 @@ const {
   connectionFromDynamoDB,
 } = require('./utils.ts');
 
-// TODO I can't reassign a variable to `queryPromise` in typescript
-// from https://stackoverflow.com/questions/50391825/cant-insert-data-into-dynamodb-using-new-nodejs-8-10
-import { promisify } from 'util';
 const { client: dynamodb } = require('./../dynamodb');
-dynamodb.queryPromise = promisify(dynamodb.query);
 
 export const Event = new GraphQLObjectType({
   name: 'Event',

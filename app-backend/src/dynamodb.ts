@@ -1,6 +1,5 @@
-'use strict';
-
-import { DynamoDB } from 'aws-sdk'
+const { DynamoDB } = require('aws-sdk');
+import { promisify } from 'util';
 
 let options = {};
 
@@ -14,3 +13,8 @@ if (process.env.IS_OFFLINE ||
 }
 
 export const client = new DynamoDB.DocumentClient(options);
+
+// TODO I can't reassign a variable to `queryPromise` in typescript
+// from https://stackoverflow.com/questions/50391825/cant-insert-data-into-dynamodb-using-new-nodejs-8-10
+client.queryPromise = promisify(client.query);
+client.scanPromise = promisify(client.scan);

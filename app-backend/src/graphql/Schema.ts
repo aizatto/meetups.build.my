@@ -32,7 +32,6 @@ const Viewer = new GraphQLObjectType({
   fields,
 });
 
-
 export const Schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
