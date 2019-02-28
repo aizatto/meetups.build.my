@@ -9,11 +9,11 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: us-east-1
-  memorySize: 128
+  memorySize: 192
   timeout: 15
   environment:
     S3_BUCKET: ${file(./secrets.json):${opt:stage}.S3_BUCKET}
-    LAMBDA_ARN: ${cf.ap-southeast-1:build-my-backend-prod.CustomEventARN}
+    LAMBDA_ARN: ${cf.ap-southeast-1:build-my-lambdas-prod.CustomEventARN}
   iamRoleStatements:
     - Effect: Allow
       Action:

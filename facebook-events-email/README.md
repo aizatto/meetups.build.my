@@ -112,7 +112,7 @@ SLS_DEBUG=* sls invoke local --function parseMessageID --data gch66kd3eham02gih8
 ```
 
 ```sh
-aws lambda invoke --function-name parseMessageID --payload r9ijpafe5co1mcmi6t3b7l8eusb47rv4r6804f01 -r us-east-1 --payload /dev/stdout
+aws lambda invoke --function-name facebook-events-email-prod-parseMessageID --payload '{"messageID": "uctmb1qgoumn5psfj4aghl21ca1tcqueumviq4o1"}' --region us-east-1 /dev/stdout
 ```
 
 ## Test Production

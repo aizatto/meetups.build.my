@@ -33,15 +33,6 @@ provider:
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsStatusIndex}
 
 functions:
-  facebookEvent:
-    handler: src/handler.facebookEvent
-  meetupOrganization:
-    handler: src/handler.meetupOrganization
-  meetupAllOrganizations:
-    handler: src/handler.meetupAllOrganizations
-    events:
-      - schedule:
-          rate: cron(0 0 * * ? *)
   expressHandler:
     handler: src/handler.expressHandler
     events:
@@ -51,15 +42,6 @@ functions:
       - http:
           path: graphql
           method: post
-  updateEventsUpcomingToPast:
-    handler: src/custom.updateEventsUpcomingToPast
-    events:
-      # Goal is to do it in the morning MYT time,
-      # so that if you are looking at it past midnight it'll still be relevant
-      - schedule:
-          rate: cron(0 0 * * ? *)
-  createEvent:
-    handler: src/custom.createEvent
 
 resources:
   Resources:
@@ -122,13 +104,6 @@ resources:
           PassthroughBehavior: WHEN_NO_MATCH
           IntegrationResponses:
             - StatusCode: 200
-  Outputs:
-    CustomEventARN:
-      Description: The ARN for the createEvent Lambda
-      Value:
-        "Fn::GetAtt": [ CreateEventLambdaFunction, Arn ]
-      Export:
-        Name: ${self:service}:${opt:stage}:CustomEventARN
 
 custom:
   DYNAMODB: ${file(./../dynamodb/tables.js)}

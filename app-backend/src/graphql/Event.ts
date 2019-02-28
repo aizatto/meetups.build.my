@@ -21,7 +21,7 @@ const {
 // from https://stackoverflow.com/questions/50391825/cant-insert-data-into-dynamodb-using-new-nodejs-8-10
 import { promisify } from 'util';
 const { client: dynamodb } = require('./../dynamodb');
-dynamodb.scanPromise = promisify(dynamodb.scan);
+dynamodb.queryPromise = promisify(dynamodb.query);
 
 export const Event = new GraphQLObjectType({
   name: 'Event',

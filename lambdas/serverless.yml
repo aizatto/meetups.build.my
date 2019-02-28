@@ -1,0 +1,65 @@
+service: build-my-lambdas
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 256
+  timeout: 60
+  environment:
+    ORGANIZATIONS_TABLE: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
+    ORGANIZATIONS_SOURCE_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+    EVENTS_TABLE: ${self:custom.DYNAMODB.EVENTS_TABLE}
+    EVENTS_STATUS_INDEX: ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: 
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsTable}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsSourceIndex}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsTable}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsStatusIndex}
+
+package:
+  include:
+    - src/**/*
+
+functions:
+  facebookEvent:
+    handler: src/handler.facebookEvent
+  meetupOrganization:
+    handler: src/handler.meetupOrganization
+  meetupAllOrganizations:
+    handler: src/handler.meetupAllOrganizations
+    events:
+      - schedule:
+          rate: cron(0 0 * * ? *)
+  updateEventsUpcomingToPast:
+    handler: src/custom.updateEventsUpcomingToPast
+    events:
+      # Goal is to do it in the morning MYT time,
+      # so that if you are looking at it past midnight it'll still be relevant
+      - schedule:
+          rate: cron(0 0 * * ? *)
+  createEvent:
+    handler: src/custom.createEvent
+
+resources:
+  Outputs:
+    CustomEventARN:
+      Description: The ARN for the createEvent Lambda
+      Value:
+        "Fn::GetAtt": [ CreateEventLambdaFunction, Arn ]
+      Export:
+        Name: ${self:service}:${opt:stage}:CustomEventARN
+
+
+custom:
+  DYNAMODB: ${file(./../dynamodb/tables.js)}

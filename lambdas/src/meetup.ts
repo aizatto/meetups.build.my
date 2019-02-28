@@ -133,7 +133,7 @@ export const fetchAll = async () => {
       ':source': 'meetup',
     },
   });
-  
+
   const asyncs = groups.Items.map(async (group : IGroup) => {
     try {
       return await fetchOrganizationEvents(group.meetup_id, group.region, "next_upcoming");
