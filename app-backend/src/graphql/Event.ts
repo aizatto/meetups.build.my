@@ -104,7 +104,7 @@ export const EventConnectionInterface = new GraphQLInterfaceType({
 export async function EventsResolver(_, args) {
   const response = await dynamodb.queryPromise({
     TableName: process.env.EVENTS_TABLE,
-    IndexName: process.env.EVENTS_STATUS_INDEX,
+    IndexName: process.env.EVENTS_START_TIME_INDEX,
     KeyConditionExpression: "#s = :status",
     ExpressionAttributeNames:{
         "#s": "status",

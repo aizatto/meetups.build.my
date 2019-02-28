@@ -12,7 +12,7 @@ provider:
     ORGANIZATIONS_TABLE: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
     ORGANIZATIONS_SOURCE_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
     EVENTS_TABLE: ${self:custom.DYNAMODB.EVENTS_TABLE}
-    EVENTS_STATUS_INDEX: ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
+    EVENTS_END_TIME_INDEX: ${self:custom.DYNAMODB.EVENTS_END_TIME_INDEX}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -25,7 +25,7 @@ provider:
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsTable}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsSourceIndex}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsTable}
-        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsStatusIndex}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsEndTimeIndex}
 
 package:
   include:

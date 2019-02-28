@@ -2,6 +2,8 @@ module.exports = (serverless) => {
   const params = {
     EVENTS_TABLE: 'events',
     EVENTS_STATUS_INDEX: 'status',
+    EVENTS_START_TIME_INDEX: 'start_time',
+    EVENTS_END_TIME_INDEX: 'end_time',
     ORGANIZATIONS_TABLE: 'organizations',
     ORGANIZATIONS_SOURCE_INDEX: 'source',
   };

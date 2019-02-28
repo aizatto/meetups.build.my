@@ -57,6 +57,9 @@ resources:
             AttributeName: status
             AttributeType: S
           -
+            AttributeName: start_time
+            AttributeType: S
+          -
             AttributeName: end_time
             AttributeType: S
         KeySchema:
@@ -65,7 +68,23 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
+          - IndexName: status
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: end_time
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+          - IndexName: ${self:custom.DYNAMODB.EVENTS_START_TIME_INDEX}
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: start_time
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+          - IndexName: ${self:custom.DYNAMODB.EVENTS_END_TIME_INDEX}
             KeySchema:
               - AttributeName: status
                 KeyType: HASH
@@ -93,15 +112,24 @@ resources:
          "Fn::GetAtt": ["eventsTable", "Arn" ]
       Export:
         Name: build-my:${opt:stage}:EventsTable
-    EventsStatusIndex:
+    EventsStartTimeIndex:
       Value:
         "Fn::Join":
           - "/"
           - - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
             - "index"
-            - ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
+            - ${self:custom.DYNAMODB.EVENTS_START_TIME_INDEX}
       Export:
-        Name: build-my:${opt:stage}:EventsStatusIndex
+        Name: build-my:${opt:stage}:EventsStartTimeIndex
+    EventsEndTimeIndex:
+      Value:
+        "Fn::Join":
+          - "/"
+          - - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
+            - "index"
+            - ${self:custom.DYNAMODB.EVENTS_END_TIME_INDEX}
+      Export:
+        Name: build-my:${opt:stage}:EventsEndTimeIndex
 
 custom:
   DYNAMODB: ${file(./tables.js)}

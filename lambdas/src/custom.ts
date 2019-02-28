@@ -31,8 +31,8 @@ export const createEvent: APIGatewayProxyHandler = async (event: APIGatewayEvent
 export const updateEventsUpcomingToPast: APIGatewayProxyHandler = async () => {
   const response = await dynamodb.queryPromise({
     TableName: process.env.EVENTS_TABLE,
-    IndexName: process.env.EVENTS_STATUS_INDEX,
-    KeyConditionExpression: "#s = :status AND #e <= :end_time",
+    IndexName: process.env.EVENTS_END_TIME_INDEX,
+    KeyConditionExpression: "#s = :status <= #end_time",
     ExpressionAttributeNames:{
       "#s": "status",
       "#e": "end_time",
