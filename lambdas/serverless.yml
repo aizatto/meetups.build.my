@@ -41,6 +41,8 @@ functions:
     events:
       - schedule:
           rate: cron(0 0 * * ? *)
+  peatix:
+    handler: src/scrapers.peatix
   updateEventsUpcomingToPast:
     handler: src/custom.updateEventsUpcomingToPast
     events:

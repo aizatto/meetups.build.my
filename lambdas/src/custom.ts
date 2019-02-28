@@ -1,10 +1,6 @@
 import { APIGatewayEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { promisify } from 'util';
 
 const { client: dynamodb } = require('./dynamodb');
-dynamodb.putPromise = promisify(dynamodb.put);
-dynamodb.queryPromise = promisify(dynamodb.query);
-dynamodb.updatePromise = promisify(dynamodb.update);
 
 export const createEvent: APIGatewayProxyHandler = async (event: APIGatewayEvent) => {
   const data = JSON.parse(event.body);

@@ -1,6 +1,5 @@
-'use strict';
-
-import { DynamoDB } from 'aws-sdk'
+import { promisify } from 'util';
+const { DynamoDB } = require('aws-sdk');
 
 let options = {};
 
@@ -14,3 +13,6 @@ if (process.env.IS_OFFLINE ||
 }
 
 export const client = new DynamoDB.DocumentClient(options);
+client.putPromise = promisify(client.put);
+client.queryPromise = promisify(client.query);
+client.updatePromise = promisify(client.update);
