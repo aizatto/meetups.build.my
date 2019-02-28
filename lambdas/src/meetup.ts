@@ -21,28 +21,49 @@ const handleMeetupResponseErrors = (json) => {
   return errors.join(', ');
 }
 
-export const createOrUpdateOrganization = async (meetup_id: string, region: string) => {
-  const response = await fetch(`https://api.meetup.com/${meetup_id}`);
+export const createOrUpdateOrganization = async (urlname: string, region: string) => {
+  const response = await fetch(`https://api.meetup.com/${urlname}?fields=last_event`);
   const json = await response.json();;
 
   if (json.errors) {
     throw new Error(handleMeetupResponseErrors(json));
   }
 
+  let last_event_at = null;
+  let last_event_url = null;
+  let next_event_at = null;
+  let next_event_url = null;
+
+  if (json.last_event) {
+    last_event_at = new Date(json.last_event.time).toISOString();
+    last_event_url = `https://www.meetup.com/${urlname}/events/${json.last_event.id}/`;
+  }
+
+  if (json.next_event) {
+    next_event_at = new Date(json.next_event.time).toISOString();
+    next_event_url = `https://www.meetup.com/${urlname}/events/${json.next_event.id}/`;
+  }
+
   await dynamodb.putPromise({
     TableName: process.env.ORGANIZATIONS_TABLE,
     Item: {
-      id: `meetup:${meetup_id}`,
-      meetup_id,
+      id: `meetup:${json.id}`,
+      meetup_id: json.id,
+      urlname,
       name:  json.name,
+      link: json.link,
       source: `meetup`,
       updated_at: new Date().toISOString(),
       raw: JSON.stringify(json),
       region,
+      last_event_at,
+      last_event_url,
+      next_event_at,
+      next_event_url,
     },
   });
 
-  return { meetup_id };
+  return json;
 }
 
 const placeFromEvent = (data) => {

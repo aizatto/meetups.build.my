@@ -24,7 +24,19 @@ export const Organization = new GraphQLObjectType({
     },
     link: {
       type: GraphQLString,
-    }
+    },
+    last_event_at: {
+      type: GraphQLString,
+    },
+    last_event_url: {
+      type: GraphQLString,
+    },
+    next_event_at: {
+      type: GraphQLString,
+    },
+    next_event_url: {
+      type: GraphQLString,
+    },
   }
 });
 

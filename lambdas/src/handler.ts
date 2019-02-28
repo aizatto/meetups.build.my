@@ -60,10 +60,13 @@ export const meetupAllOrganizations: APIGatewayProxyHandler = async (event : API
   };
 }
 
-export const meetupOrganization: APIGatewayProxyHandler = async (event : APIGatewayEvent) => {
-  const data = JSON.parse(event.body);
-  const meetup = await createOrUpdateMeetupOrganization(data.id, data.region);
-  const events = await fetchOrganizationMeetupEvents(data.id, data.region, "future_or_past");
+export const meetupOrganization: APIGatewayProxyHandler = async (event: any) => {
+  const {
+    urlname,
+    region,
+  } = event;
+  const meetup = await createOrUpdateMeetupOrganization(urlname, region);
+  const events = await fetchOrganizationMeetupEvents(urlname, region, "future_or_past");
 
   return {
     statusCode: 200,

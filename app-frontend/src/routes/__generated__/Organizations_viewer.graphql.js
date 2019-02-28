@@ -16,7 +16,11 @@ export type Organizations_viewer = {|
       +node: ?{|
         +id: string,
         +name: string,
-        +link: string,
+        +link: ?string,
+        +last_event_at: ?string,
+        +last_event_url: ?string,
+        +next_event_at: ?string,
+        +next_event_url: ?string,
       |}
     |}>,
     +totalCount: number,
@@ -106,6 +110,34 @@ const node/*: ReaderFragment*/ = {
                 {
                   "kind": "ScalarField",
                   "alias": null,
+                  "name": "last_event_at",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "last_event_url",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "next_event_at",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
+                  "name": "next_event_url",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
                   "name": "__typename",
                   "args": null,
                   "storageKey": null
@@ -158,5 +190,5 @@ const node/*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = '4fb8797a84b2fb154a9214e1f4b399ce';
+(node/*: any*/).hash = 'd6557c855957f968b42448f36954b09c';
 module.exports = node;

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 5d10b76387c26bbb54484494cba57ace
+ * @relayHash 8008fd89b4a779f71d4bf2fa8e4cce46
  */
 
 /* eslint-disable */
@@ -43,6 +43,10 @@ fragment Organizations_viewer on Viewer {
         id
         name
         link
+        last_event_at
+        last_event_url
+        next_event_at
+        next_event_url
         __typename
       }
       cursor
@@ -177,6 +181,34 @@ return {
                       {
                         "kind": "ScalarField",
                         "alias": null,
+                        "name": "last_event_at",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "last_event_url",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "next_event_at",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "name": "next_event_url",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
                         "name": "__typename",
                         "args": null,
                         "storageKey": null
@@ -252,7 +284,7 @@ return {
     "operationKind": "query",
     "name": "OrganizationsRoutePaginationQuery",
     "id": null,
-    "text": "query OrganizationsRoutePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  viewer {\n    ...Organizations_viewer\n  }\n}\n\nfragment Organizations_viewer on Viewer {\n  organizations(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        name\n        link\n        __typename\n      }\n      cursor\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query OrganizationsRoutePaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  viewer {\n    ...Organizations_viewer\n  }\n}\n\nfragment Organizations_viewer on Viewer {\n  organizations(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        name\n        link\n        last_event_at\n        last_event_url\n        next_event_at\n        next_event_url\n        __typename\n      }\n      cursor\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

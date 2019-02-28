@@ -35,7 +35,11 @@ type Organization {
   # The ID of an object
   id: ID!
   name: String!
-  link: String!
+  link: String
+  last_event_at: String
+  last_event_url: String
+  next_event_at: String
+  next_event_url: String
 }
 
 # A connection to a list of items.
