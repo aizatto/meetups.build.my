@@ -22,7 +22,6 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^8.0.57",
-    "serverless-dynamodb-local": "0.2.30",
     "serverless-offline": "^4.5.0",
     "serverless-webpack": "^5.1.1",
     "source-map-support": "^0.5.6",

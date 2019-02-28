@@ -1,0 +1,122 @@
+service: build-my-dynamodb
+
+plugins:
+  - serverless-dynamodb-local
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+resources:
+  Resources:
+    organizationsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+          -
+            AttributeName: source
+            AttributeType: S
+          -
+            AttributeName: name
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+          -
+            AttributeName: name
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+            KeySchema:
+              - 
+                AttributeName: source
+                KeyType: HASH
+              -
+                AttributeName: name
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+    # Events
+    eventsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.DYNAMODB.EVENTS_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+          -
+            AttributeName: status
+            AttributeType: S
+          -
+            AttributeName: end_time
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: end_time
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+  Outputs:
+    OrganizationsTable:
+      Value: 
+        "Fn::GetAtt": ["organizationsTable", "Arn" ]
+      Export:
+        Name: build-my:${opt:stage}:OrganizationsTable
+    OrganizationsSourceIndex:
+      Value:
+        "Fn::Join":
+          - "/"
+          - - { "Fn::GetAtt": ["organizationsTable", "Arn" ] }
+            - "index"
+            - ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+      Export:
+        Name: build-my:${opt:stage}:OrganizationsSourceIndex
+    EventsTable:
+      Value:
+         "Fn::GetAtt": ["eventsTable", "Arn" ]
+      Export:
+        Name: build-my:${opt:stage}:EventsTable
+    EventsStatusIndex:
+      Value:
+        "Fn::Join":
+          - "/"
+          - - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
+            - "index"
+            - ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
+      Export:
+        Name: build-my:${opt:stage}:EventsStatusIndex
+
+custom:
+  DYNAMODB: ${file(./tables.js)}
+  dynamodb:
+    start:
+      migrate: true
+      seed: true
+      inMemory: false
+      dbPath: ${env:PWD}/.dynamodb
+    seed:
+      meetup:
+        sources:
+          -
+            table: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
+            sources: [./seed/organizations.json]
+          -
+            table: ${self:custom.DYNAMODB.EVENTS_TABLE}
+            sources: [./seed/events.json]

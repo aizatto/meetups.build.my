@@ -4,7 +4,6 @@ service:
 plugins:
   - serverless-webpack
   - serverless-domain-manager
-  - serverless-dynamodb-local
   - serverless-offline
 
 provider:
@@ -15,10 +14,10 @@ provider:
   timeout: 60
   environment:
     DOMAIN_NAME: ${file(./secrets.json):${opt:stage}.DOMAIN_NAME}
-    ORGANIZATIONS_TABLE: build-my-${opt:stage}-organizations
-    ORGANIZATIONS_SOURCE_INDEX: build-my-${opt:stage}-organizations-source
-    EVENTS_TABLE: build-my-${opt:stage}-events
-    EVENTS_STATUS_INDEX: build-my-${opt:stage}-events-status
+    ORGANIZATIONS_TABLE: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
+    ORGANIZATIONS_SOURCE_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+    EVENTS_TABLE: ${self:custom.DYNAMODB.EVENTS_TABLE}
+    EVENTS_STATUS_INDEX: ${self:custom.DYNAMODB.EVENTS_STATUS_INDEX}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -28,18 +27,10 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
       Resource: 
-        - { "Fn::GetAtt": ["organizationsTable", "Arn" ] }
-        - "Fn::Join":
-          - "/"
-          - - { "Fn::GetAtt": ["organizationsTable", "Arn" ] }
-            - "index"
-            - ${self:provider.environment.ORGANIZATIONS_SOURCE_INDEX}
-        - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
-        - "Fn::Join":
-          - "/"
-          - - { "Fn::GetAtt": ["eventsTable", "Arn" ] }
-            - "index"
-            - ${self:provider.environment.EVENTS_STATUS_INDEX}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsTable}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsSourceIndex}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsTable}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsStatusIndex}
 
 functions:
   facebookEvent:
@@ -131,72 +122,6 @@ resources:
           PassthroughBehavior: WHEN_NO_MATCH
           IntegrationResponses:
             - StatusCode: 200
-    # Organizations
-    organizationsTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        TableName: ${self:provider.environment.ORGANIZATIONS_TABLE}
-        AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
-          -
-            AttributeName: source
-            AttributeType: S
-          -
-            AttributeName: name
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
-          -
-            AttributeName: name
-            KeyType: RANGE
-        BillingMode: PAY_PER_REQUEST
-        GlobalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.ORGANIZATIONS_SOURCE_INDEX}
-            KeySchema:
-              - 
-                AttributeName: source
-                KeyType: HASH
-              -
-                AttributeName: name
-                KeyType: RANGE
-            Projection:
-              ProjectionType: "ALL"
-
-    # Events
-    eventsTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        TableName: ${self:provider.environment.EVENTS_TABLE}
-        AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
-          -
-            AttributeName: status
-            AttributeType: S
-          -
-            AttributeName: end_time
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        GlobalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.EVENTS_STATUS_INDEX}
-            KeySchema:
-              - AttributeName: status
-                KeyType: HASH
-              - AttributeName: end_time
-                KeyType: RANGE
-            Projection:
-              ProjectionType: "ALL"
   Outputs:
     CustomEventARN:
       Description: The ARN for the createEvent Lambda
@@ -206,18 +131,7 @@ resources:
         Name: ${self:service}:${opt:stage}:CustomEventARN
 
 custom:
-  dynamodb:
-    start:
-      migrate: true
-      seed: true
-      inMemory: false
-      dbPath: ${env:PWD}/.dynamodb
-    seed:
-      meetup: # This key name is irrelevant
-        sources:
-          -
-            table: ${self:provider.environment.ORGANIZATIONS_TABLE}
-            sources: [./seed/organizations.json]
+  DYNAMODB: ${file(./../dynamodb/tables.js)}
   customDomain:
     domainName: ${self:provider.environment.DOMAIN_NAME}
     basePath: ${file(./secrets.json):${opt:stage}.BASE_PATH, 'false'}

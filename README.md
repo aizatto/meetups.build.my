@@ -11,7 +11,7 @@
   - Relay
   - React
   - TypeScript
-  - OAuth0
+  - Auth0
 - Region support
     - A great example is https://engineers.sg but they only support Singapore
     - I travel with South East Asia
@@ -21,6 +21,41 @@ Local (Malaysian) alternatives:
 - http://devkami.com/meetups/
 - http://malaysia.herokuapp.com/
 - https://docs.google.com/spreadsheets/d/16ncyDZH-wGN1XK9D0En2teWNw5WLnf-jrrfvzRaajgs/edit#gid=0
+
+Event Goals:
+
+- Local tech community discovery
+- This is not a page to sell a person/company's product
+- Help people new to the industry to find relevant events
+- Spur and encourage building more things
+- Have a community of builders
+
+Current Rules for including Events:
+
+- Most Events in Malaysia
+  - Definitely community events
+  - Definitely conferences
+  - Definitely Hackathons
+  - Maybe paid workshops
+  - Maybe networking events
+- Conferences in the region (Malaysia)
+- Limit events from Singapore
+  - Already has https://engineers.sg
+  - Definitely include conferences to expose people to a larger community
+
+How I define:
+
+- Community:
+  - Grass roots
+  - Intentions are not for profit
+  - Can charge money to pay for expenses (venue, speakers, etc)
+  - Can charge a minimal amount to get people to confirm their spots
+- Workshops:
+  - These can be both both commercial and community, so can be confusing
+- Hackathons:
+  - These can be both both commercial and community, so can be confusing
+- Conferences:
+  - These can be both both commercial and community, so can be confusing
 
 ## Warnings, Disclaimer, Gotchas
 
@@ -66,6 +101,9 @@ Local (Malaysian) alternatives:
   - Google Form to submit
 - Need a lambda to convert "upcoming" events to "past"
 - Stop fetching all meetup events
+- Split up `app-backend/serverless.yml` into multiple services:
+  - lambdas
+  - dynamodb
 
 ## Questions
 
