@@ -50,12 +50,19 @@ How I define:
   - Intentions are not for profit
   - Can charge money to pay for expenses (venue, speakers, etc)
   - Can charge a minimal amount to get people to confirm their spots
+  - Should include most Student targeted events
 - Workshops:
   - These can be both both commercial and community, so can be confusing
 - Hackathons:
   - These can be both both commercial and community, so can be confusing
 - Conferences:
   - These can be both both commercial and community, so can be confusing
+
+When does a Meetup become Inactive?
+
+- Cannot be scraped
+- No upcoming events
+- No events in the past 6 months
 
 ## Warnings, Disclaimer, Gotchas
 
@@ -78,8 +85,6 @@ How I define:
 - Add eslint/prettier support
 - Fix Facebook Scraper
   - Can't scrape a Group or Page's events because of permissions
-  - Need to request permissions and go through permission process
-  - Possibly use Parameter Store for Facebook Token possibly
 - Create Custom Events
   - Eventbrite
   - Peatix

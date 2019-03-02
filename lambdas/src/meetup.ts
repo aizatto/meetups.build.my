@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { promisify } from 'util';
+import { subMonths } from 'date-fns';
 
 // TODO I can't reassign a variable to `queryPromise` in typescript
 // from https://stackoverflow.com/questions/50391825/cant-insert-data-into-dynamodb-using-new-nodejs-8-10
@@ -29,6 +30,8 @@ export const createOrUpdateOrganization = async (urlname: string, region: string
     throw new Error(handleMeetupResponseErrors(json));
   }
 
+  let status = 'inactive';
+
   let last_event_at = null;
   let last_event_url = null;
   let next_event_at = null;
@@ -37,11 +40,15 @@ export const createOrUpdateOrganization = async (urlname: string, region: string
   if (json.last_event) {
     last_event_at = new Date(json.last_event.time).toISOString();
     last_event_url = `https://www.meetup.com/${urlname}/events/${json.last_event.id}/`;
+    if (subMonths(new Date(), 6) <= last_event_at) {
+      status = 'active';
+    }
   }
 
   if (json.next_event) {
     next_event_at = new Date(json.next_event.time).toISOString();
     next_event_url = `https://www.meetup.com/${urlname}/events/${json.next_event.id}/`;
+    status = 'active';
   }
 
   await dynamodb.putPromise({
@@ -60,6 +67,7 @@ export const createOrUpdateOrganization = async (urlname: string, region: string
       last_event_url,
       next_event_at,
       next_event_url,
+      status,
     },
   });
 

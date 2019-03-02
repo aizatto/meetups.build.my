@@ -2,6 +2,9 @@ import { APIGatewayEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
 const { client: dynamodb } = require('./dynamodb');
 
+/**
+ * Called by `facebook-events-ses`
+ */
 export const createEvent: APIGatewayProxyHandler = async (event: APIGatewayEvent) => {
   const data = JSON.parse(event.body);
 

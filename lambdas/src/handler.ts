@@ -1,49 +1,25 @@
 import { APIGatewayProxyHandler, APIGatewayEvent } from 'aws-lambda';
-import {
-  fetchAll as fetchAllFacebookOrganizations,
-  createOrUpdateOrganization as createOrUpdateFacebookOrganization,
-  createOrUpdateEvent as createOrUpdateFacebookEvent,
-} from './facebook';
+import { fetchFacebookOrganizationEvents } from './facebook';
 import {
   fetchAll as fetchAllMeetupOrganizations,
   createOrUpdateOrganization as createOrUpdateMeetupOrganization,
   fetchOrganizationEvents as fetchOrganizationMeetupEvents,
 } from './meetup';
+import { writeBatchItems } from './utils';
 
-export const facebookAllOrganizations: APIGatewayProxyHandler = async (event : APIGatewayEvent) => {
-  const results = await fetchAllFacebookOrganizations();
+export const facebookOrganization: APIGatewayProxyHandler = async () => {
+  const facebook_id = '397934987666525';
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      input: event,
-      results,
-    }),
-  };
-}
-
-export const facebookOrganization: APIGatewayProxyHandler = async (event : APIGatewayEvent) => {
-  const data = JSON.parse(event.body);
-  const results = await createOrUpdateFacebookOrganization(data.id, data.region);
+  const items = await fetchFacebookOrganizationEvents(facebook_id);
+  await writeBatchItems(
+    process.env.EVENTS_TABLE,
+    items,
+  );
 
   return {
     statusCode: 200,
     body: JSON.stringify({
-      input: event,
-      results,
-    }),
-  };
-}
-
-export const facebookEvent: APIGatewayProxyHandler = async (event : APIGatewayEvent) => {
-  const data = JSON.parse(event.body);
-  const results = await createOrUpdateFacebookEvent(data.id, data.region);
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      input: event,
-      results,
+      items,
     }),
   };
 }

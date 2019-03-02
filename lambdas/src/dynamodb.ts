@@ -16,3 +16,4 @@ export const client = new DynamoDB.DocumentClient(options);
 client.putPromise = promisify(client.put);
 client.queryPromise = promisify(client.query);
 client.updatePromise = promisify(client.update);
+client.batchWritePromise = promisify(client.batchWrite);

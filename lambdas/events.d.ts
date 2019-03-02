@@ -1,0 +1,17 @@
+interface Event {
+  id: string,
+  name: string,
+  description: string,
+  link: string,
+  source: string,
+  region: string,
+  source_id: string,
+  start_time: string,
+  end_time: string,
+  status: string,
+  venue?: string,
+  place?: string,
+  city?: string,
+  country?: string,
+  updated_at: string,
+}
