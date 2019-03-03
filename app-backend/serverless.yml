@@ -11,7 +11,7 @@ provider:
   runtime: nodejs8.10
   region: ap-southeast-1
   memorySize: 256
-  timeout: 60
+  timeout: 30
   environment:
     DOMAIN_NAME: ${file(./secrets.json):${opt:stage}.DOMAIN_NAME}
     ORGANIZATIONS_TABLE: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
