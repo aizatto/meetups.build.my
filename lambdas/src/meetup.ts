@@ -22,7 +22,7 @@ const handleMeetupResponseErrors = (json) => {
   return errors.join(', ');
 }
 
-export const createOrUpdateOrganization = async (urlname: string, region: string) => {
+export const fetchMeetupOrganization = async (urlname: string, region: string) => {
   const response = await fetch(`https://api.meetup.com/${urlname}?fields=last_event`);
   const json = await response.json();;
 
@@ -51,27 +51,22 @@ export const createOrUpdateOrganization = async (urlname: string, region: string
     status = 'active';
   }
 
-  await dynamodb.putPromise({
-    TableName: process.env.ORGANIZATIONS_TABLE,
-    Item: {
-      id: `meetup:${json.id}`,
-      meetup_id: json.id,
-      urlname,
-      name:  json.name,
-      link: json.link,
-      source: `meetup`,
-      updated_at: new Date().toISOString(),
-      raw: JSON.stringify(json),
-      region,
-      last_event_at,
-      last_event_url,
-      next_event_at,
-      next_event_url,
-      status,
-    },
-  });
-
-  return json;
+  return {
+    id: `meetup:${json.id}`,
+    meetup_id: json.id,
+    urlname,
+    name:  json.name,
+    link: json.link,
+    source: `meetup`,
+    updated_at: new Date().toISOString(),
+    raw: JSON.stringify(json),
+    region,
+    last_event_at,
+    last_event_url,
+    next_event_at,
+    next_event_url,
+    status,
+  };
 }
 
 const placeFromEvent = (data) => {
@@ -89,7 +84,7 @@ const placeFromEvent = (data) => {
   };
 }
 
-export const createOrUpdateEventResponse = async ({ region }, event) => {
+function mapMeetupEventToDynamoDBItem({ region }, event) {
   const id = `meetup:${event.id}`;
 
   const {
@@ -110,32 +105,27 @@ export const createOrUpdateEventResponse = async ({ region }, event) => {
     ? 'past'
     : 'upcoming';
 
-  await dynamodb.putPromise({
-    TableName: process.env.EVENTS_TABLE,
-    Item: {
-      name: event.name,
-      description: event.description,
-      link: event.link,
-      source: "meetup",
-      meetup_id: event.id,
-      id,
-      start_time: start_time.toISOString(),
-      end_time: end_time.toISOString(),
-      status,
-      venue,
-      place,
-      city,
-      country,
-      region,
-      updated_at: new Date().toISOString(),
-      raw: JSON.stringify(event),
-    },
-  });
-
-  return event;
+  return {
+    name: event.name,
+    description: event.description,
+    link: event.link,
+    source: "meetup",
+    meetup_id: event.id,
+    id,
+    start_time: start_time.toISOString(),
+    end_time: end_time.toISOString(),
+    status,
+    venue,
+    place,
+    city,
+    country,
+    region,
+    updated_at: new Date().toISOString(),
+    raw: JSON.stringify(event),
+  };
 }
 
-export const fetchOrganizationEvents = async (meetup_id : string, region : string, scroll = "future_or_past") => {
+export const fetchOrganizationMeetupEvents = async (meetup_id : string, region : string, scroll = "future_or_past") => {
   const response = await fetch(`https://api.meetup.com/${meetup_id}/events?scroll=${scroll}`);
   const json = await response.json();
 
@@ -143,11 +133,9 @@ export const fetchOrganizationEvents = async (meetup_id : string, region : strin
     throw new Error(handleMeetupResponseErrors(json));
   }
 
-  const asyncs = json.map(async (event) => 
-    createOrUpdateEventResponse({ region }, event)
+  return json.map((event) =>
+    mapMeetupEventToDynamoDBItem({ region }, event)
   );
-
-  return await Promise.all(asyncs);
 };
 
 export const fetchAll = async () => {
@@ -165,10 +153,10 @@ export const fetchAll = async () => {
 
   const asyncs = groups.Items.map(async (group : IGroup) => {
     try {
-      return await fetchOrganizationEvents(group.meetup_id, group.region, "next_upcoming");
+      return await fetchOrganizationMeetupEvents(group.meetup_id, group.region, "next_upcoming");
     } catch (error) {
       console.error(error);
-      return {};
+      return [];
     }
   });
 
