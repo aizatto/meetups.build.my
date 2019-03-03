@@ -1,4 +1,5 @@
 process.env.ORGANIZATIONS_TABLE = 'organizations';
+process.env.ORGANIZATIONS_STATUS_INDEX = 'status';
 process.env.EVENTS_TABLE = 'events';
 process.env.EVENTS_START_TIME_INDEX = 'start_time';
 process.env.IS_OFFLINE = 'true';

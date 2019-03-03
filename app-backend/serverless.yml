@@ -16,6 +16,7 @@ provider:
     DOMAIN_NAME: ${file(./secrets.json):${opt:stage}.DOMAIN_NAME}
     ORGANIZATIONS_TABLE: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
     ORGANIZATIONS_SOURCE_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+    ORGANIZATIONS_STATUS_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_STATUS_INDEX}
     EVENTS_TABLE: ${self:custom.DYNAMODB.EVENTS_TABLE}
     EVENTS_START_TIME_INDEX: ${self:custom.DYNAMODB.EVENTS_START_TIME_INDEX}
   iamRoleStatements:
@@ -26,9 +27,10 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
-      Resource: 
+      Resource:
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsTable}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsSourceIndex}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsStatusIndex}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsTable}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsStartTimeIndex}
 

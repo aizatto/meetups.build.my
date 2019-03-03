@@ -49,8 +49,27 @@ export const {
 });
 
 export async function OrganizationsResolver(_, args) {
-  const response = await dynamodb.scanPromise({
+  console.log({
     TableName: process.env.ORGANIZATIONS_TABLE,
+    IndexName: process.env.ORGANIZATIONS_STATUS_INDEX,
+    KeyConditionExpression: "#s = :status",
+    ExpressionAttributeNames:{
+        "#s": "status",
+    },
+    ExpressionAttributeValues: {
+        ":status": "active"
+    },
+  });
+  const response = await dynamodb.queryPromise({
+    TableName: process.env.ORGANIZATIONS_TABLE,
+    IndexName: process.env.ORGANIZATIONS_STATUS_INDEX,
+    KeyConditionExpression: "#s = :status",
+    ExpressionAttributeNames:{
+        "#s": "status",
+    },
+    ExpressionAttributeValues: {
+        ":status": "active"
+    },
   });
 
   return connectionFromDynamoDB(response, args);

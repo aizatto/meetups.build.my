@@ -19,27 +19,22 @@ resources:
             AttributeName: id
             AttributeType: S
           -
-            AttributeName: source
+            AttributeName: name
             AttributeType: S
           -
-            AttributeName: name
+            AttributeName: status
             AttributeType: S
         KeySchema:
           -
             AttributeName: id
             KeyType: HASH
-          -
-            AttributeName: name
-            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+          - IndexName: ${self:custom.DYNAMODB.ORGANIZATIONS_STATUS_INDEX}
             KeySchema:
-              - 
-                AttributeName: source
+              - AttributeName: status
                 KeyType: HASH
-              -
-                AttributeName: name
+              - AttributeName: name
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
@@ -98,6 +93,15 @@ resources:
         "Fn::GetAtt": ["organizationsTable", "Arn" ]
       Export:
         Name: build-my:${opt:stage}:OrganizationsTable
+    OrganizationsStatusIndex:
+      Value:
+        "Fn::Join":
+          - "/"
+          - - { "Fn::GetAtt": ["organizationsTable", "Arn" ] }
+            - "index"
+            - ${self:custom.DYNAMODB.ORGANIZATIONS_STATUS_INDEX}
+      Export:
+        Name: build-my:${opt:stage}:OrganizationsStatusIndex
     OrganizationsSourceIndex:
       Value:
         "Fn::Join":
@@ -142,9 +146,7 @@ custom:
     seed:
       meetup:
         sources:
-          -
-            table: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
+          - table: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
             sources: [./seed/organizations.json]
-          -
-            table: ${self:custom.DYNAMODB.EVENTS_TABLE}
+          - table: ${self:custom.DYNAMODB.EVENTS_TABLE}
             sources: [./seed/events.json]
