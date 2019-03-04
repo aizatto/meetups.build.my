@@ -11,12 +11,23 @@ Options:
     - You have mark yourself as "Interested" to an Event
       - Everyone on your Facebook can see this
     - You have to remember to use the email you specified
+    - iOS doesn't have this feature
 2. Use Facebook's "Add to Page..." Feature, and only scrape a Page you own
   - Pros:
     - Can reuse Facebook APIs
   - Cons:
     - You have to create/maintain a new page
     - Requires polling
+    - iOS doesn't have this feature
+3. Store other user's Facebook Access Token to fetch groups/pages events
+  - Requirements:
+    - Build a page where user's can support a group/page
+    - Map Group to Access Token; or which User's have the Access Token to access a particular group
+  - Pros:
+    - Full proof, mostly
+  - Cons:
+    - Need to safely store Access Token, AWS Cognito maybe?
+    - Need to request from Facebook permissions to use groups and pages access token
 
 I originally went with Option 1, but exploring Option 2 as I dislike having to expose myself as "Interested" to an Event, when I'm not really.
 

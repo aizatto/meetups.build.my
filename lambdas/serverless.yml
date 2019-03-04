@@ -1,6 +1,7 @@
 service: build-my-lambdas
 
 plugins:
+  - serverless-iam-roles-per-function
   - serverless-webpack
 
 provider:
@@ -11,6 +12,7 @@ provider:
   environment:
     ORGANIZATIONS_TABLE: ${self:custom.DYNAMODB.ORGANIZATIONS_TABLE}
     ORGANIZATIONS_SOURCE_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_SOURCE_INDEX}
+    ORGANIZATIONS_STATUS_INDEX: ${self:custom.DYNAMODB.ORGANIZATIONS_STATUS_INDEX}
     EVENTS_TABLE: ${self:custom.DYNAMODB.EVENTS_TABLE}
     EVENTS_END_TIME_INDEX: ${self:custom.DYNAMODB.EVENTS_END_TIME_INDEX}
   iamRoleStatements:
@@ -21,11 +23,15 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
-      Resource: 
+        - dynamodb:BatchWriteItem
+      Resource:
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsTable}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsSourceIndex}
+        - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsStatusIndex}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsTable}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsEndTimeIndex}
+  tags:
+    product: build-my-${opt:stage}
 
 package:
   include:
@@ -37,6 +43,13 @@ functions:
     events:
       - schedule:
           rate: cron(0 0 * * ? *)
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - ssm:GetParameter
+        Resource:
+          - "arn:aws:ssm:${opt:region}:*:parameter/build.my/${opt:stage}/FACEBOOK_ACCESS_TOKEN"
   meetupOrganization:
     handler: src/handler.meetupOrganization
   meetupAllOrganizations:
