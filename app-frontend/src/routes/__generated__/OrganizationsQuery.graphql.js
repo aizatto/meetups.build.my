@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 278f0c3e2837a8114f5b120d94dbcfd4
+ * @relayHash 6e5bb8f95c900c29d0f6d814aa293960
  */
 
 /* eslint-disable */
@@ -47,6 +47,7 @@ fragment Organizations_viewer on Viewer {
         last_event_url
         next_event_at
         next_event_url
+        requires_facebook_access_token
         __typename
       }
       cursor
@@ -209,6 +210,13 @@ return {
                       {
                         "kind": "ScalarField",
                         "alias": null,
+                        "name": "requires_facebook_access_token",
+                        "args": null,
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
                         "name": "__typename",
                         "args": null,
                         "storageKey": null
@@ -284,7 +292,7 @@ return {
     "operationKind": "query",
     "name": "OrganizationsQuery",
     "id": null,
-    "text": "query OrganizationsQuery(\n  $count: Int\n  $cursor: String\n) {\n  viewer {\n    ...Organizations_viewer\n  }\n}\n\nfragment Organizations_viewer on Viewer {\n  organizations(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        name\n        link\n        last_event_at\n        last_event_url\n        next_event_at\n        next_event_url\n        __typename\n      }\n      cursor\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
+    "text": "query OrganizationsQuery(\n  $count: Int\n  $cursor: String\n) {\n  viewer {\n    ...Organizations_viewer\n  }\n}\n\nfragment Organizations_viewer on Viewer {\n  organizations(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        name\n        link\n        last_event_at\n        last_event_url\n        next_event_at\n        next_event_url\n        requires_facebook_access_token\n        __typename\n      }\n      cursor\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n",
     "metadata": {}
   }
 };

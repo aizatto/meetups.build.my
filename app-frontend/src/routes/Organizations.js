@@ -34,22 +34,16 @@ class OrganizationsPagination extends React.Component {
 
   renderOrganizations() {
     const rows = this.props.viewer.organizations.edges.map(({node: org}) => {
-      const last_event_at = this.renderDate(org.last_event_at, org.last_event_url);
-      const next_event_at = this.renderDate(org.next_event_at, org.next_event_url);
+      const dates = this.renderEventTimes(org);
 
       return (
-        <tr>
+        <tr key={org.id}>
           <td>
             <a href={org.link} target="_blank" rel="noopener noreferrer">
               {org.name}
             </a>
           </td>
-          <td style={{textAlign: "right"}}>
-            {last_event_at}
-          </td>
-          <td>
-            {next_event_at}
-          </td>
+          {dates}
         </tr>
       );
     });
@@ -57,14 +51,45 @@ class OrganizationsPagination extends React.Component {
     return (
       <table className="table">
         <thead>
-          <th>Name</th>
-          <th style={{textAlign: "right"}}>Last Event At</th>
-          <th>Next Event At</th>
+          <tr>
+            <th>Name</th>
+            <th style={{textAlign: "right"}}>Last Event At</th>
+            <th>Next Event At</th>
+          </tr>
         </thead>
         <tbody>
           {rows}
         </tbody>
       </table>
+    );
+  }
+
+  renderEventTimes(org) {
+    if (org.requires_facebook_access_token) {
+      return (
+        <td colSpan="2">
+          <div>
+            Are you an Admin of this Facebook Group?
+          </div>
+          <a href={process.env.REACT_APP_FACEBOOK_LOGIN_URL}>Login to Facebook</a>
+          {' '}
+          to automatically add events to build.my
+        </td>
+      );
+    }
+
+    let last_event_at = this.renderDate(org.last_event_at, org.last_event_url);
+    let next_event_at = this.renderDate(org.next_event_at, org.next_event_url);
+
+    return(
+      <React.Fragment>
+        <td style={{textAlign: "right"}}>
+          {last_event_at}
+        </td>
+        <td>
+          {next_event_at}
+        </td>
+      </React.Fragment>
     );
   }
 
@@ -111,6 +136,7 @@ const OrganizationsPaginationContainer = createPaginationContainer(
               last_event_url
               next_event_at
               next_event_url
+              requires_facebook_access_token
             }
           }
           totalCount

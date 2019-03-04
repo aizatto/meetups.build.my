@@ -9,5 +9,6 @@ plugins:
 
 custom:
   client:
-    bucketName: build.my
+    bucketName: ${file(./config.json):${opt:stage}.BUCKET_NAME}
     distributionFolder: build
+

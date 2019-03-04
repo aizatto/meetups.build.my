@@ -1,0 +1,8 @@
+{
+  "dev": {
+    "BUCKET_NAME": "dev.build.my"
+  },
+  "prod": {
+    "BUCKET_NAME": "build.my"
+  }
+}

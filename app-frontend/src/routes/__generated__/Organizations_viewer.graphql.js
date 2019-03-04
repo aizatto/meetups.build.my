@@ -21,6 +21,7 @@ export type Organizations_viewer = {|
         +last_event_url: ?string,
         +next_event_at: ?string,
         +next_event_url: ?string,
+        +requires_facebook_access_token: ?boolean,
       |}
     |}>,
     +totalCount: number,
@@ -138,6 +139,13 @@ const node/*: ReaderFragment*/ = {
                 {
                   "kind": "ScalarField",
                   "alias": null,
+                  "name": "requires_facebook_access_token",
+                  "args": null,
+                  "storageKey": null
+                },
+                {
+                  "kind": "ScalarField",
+                  "alias": null,
                   "name": "__typename",
                   "args": null,
                   "storageKey": null
@@ -190,5 +198,5 @@ const node/*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'd6557c855957f968b42448f36954b09c';
+(node/*: any*/).hash = 'abbdf294a46da934b50ca82c11e167d5';
 module.exports = node;

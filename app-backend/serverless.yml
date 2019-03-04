@@ -33,6 +33,8 @@ provider:
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.OrganizationsStatusIndex}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsTable}
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsStartTimeIndex}
+  tags:
+    product: build-my-${opt:stage}
 
 functions:
   expressHandler:
@@ -78,7 +80,7 @@ resources:
         Integration:
           IntegrationHttpMethod: GET
           Type: HTTP_PROXY
-          Uri: 'http://build.my.s3-website-us-east-1.amazonaws.com/{proxy}'
+          Uri: ${file(./secrets.json):${opt:stage}.S3_BUCKET}/{proxy}
           PassthroughBehavior: WHEN_NO_MATCH
           IntegrationResponses:
             - StatusCode: 200
@@ -102,7 +104,7 @@ resources:
         Integration:
           IntegrationHttpMethod: GET
           Type: HTTP_PROXY
-          Uri: 'http://build.my.s3-website-us-east-1.amazonaws.com/'
+          Uri: ${file(./secrets.json):${opt:stage}.S3_BUCKET}/
           PassthroughBehavior: WHEN_NO_MATCH
           IntegrationResponses:
             - StatusCode: 200
