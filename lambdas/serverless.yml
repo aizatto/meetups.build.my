@@ -32,6 +32,11 @@ provider:
         - ${cf.ap-southeast-1:build-my-dynamodb-${opt:stage}.EventsEndTimeIndex}
   tags:
     product: build-my-${opt:stage}
+  deploymentBucket:
+    tags:
+      product: build-my-${opt:stage}
+  stackTags:
+    product: build-my-${opt:stage}
 
 package:
   include:

@@ -19,6 +19,7 @@ Options:
     - You have to create/maintain a new page
     - Requires polling
     - iOS doesn't have this feature
+    - Not full proof, doesn't load all events
 3. Store other user's Facebook Access Token to fetch groups/pages events
   - Requirements:
     - Build a page where user's can support a group/page

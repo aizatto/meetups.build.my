@@ -30,7 +30,7 @@ export async function writeBatchItems(table: string, all_items: Event[]) {
 }
 
 export async function writeBatchTables(tables: Table[]) {
-  let requests = [];
+  const requests = [];
 
   let RequestItems = {};
   let batchSize = 0;
@@ -52,17 +52,24 @@ export async function writeBatchTables(tables: Table[]) {
       batchSize += 1;
 
       if (batchSize === 25) {
-        batchSize = 0;
         requests.push({
           RequestItems,
         });
+        RequestItems = [];
+        batchSize = 0;
       }
     }
   }
 
+  // Push the last batch
+  if (batchSize != 0) {
+    requests.push({
+      RequestItems,
+    });
+  }
+
   // TODO handle UnprocessedItems
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html#DDB-BatchWriteItem-response-UnprocessedItems
-
   return await Promise.all(requests.map(async (params) => {
     return await dynamodb.batchWritePromise(params);
   }));

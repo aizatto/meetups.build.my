@@ -48,7 +48,7 @@ export const meetupOrganization: APIGatewayProxyHandler = async (event: any) => 
   const meetup = await fetchMeetupOrganization(urlname, region);
   const events = await fetchOrganizationMeetupEvents(urlname, region, "future_or_past");
 
-  await writeBatchTables([
+  const response = await writeBatchTables([
     {
       TableName: process.env.ORGANIZATIONS_TABLE,
       RequestItems: [meetup],
@@ -64,6 +64,7 @@ export const meetupOrganization: APIGatewayProxyHandler = async (event: any) => 
     body: JSON.stringify({
       meetup,
       events,
+      response,
     }),
   };
 }
