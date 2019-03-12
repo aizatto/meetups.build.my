@@ -9,7 +9,7 @@ dynamodb.scanPromise = promisify(dynamodb.scan);
 dynamodb.putPromise = promisify(dynamodb.put);
 
 interface IGroup {
-  meetup_id: string,
+  urlname: string,
   region: string,
 }
 
@@ -125,8 +125,8 @@ function mapMeetupEventToDynamoDBItem({ region }, event) {
   };
 }
 
-export const fetchOrganizationMeetupEvents = async (meetup_id : string, region : string, scroll = "future_or_past") => {
-  const response = await fetch(`https://api.meetup.com/${meetup_id}/events?scroll=${scroll}`);
+export const fetchOrganizationMeetupEvents = async (urlname: string, region : string, scroll = "future_or_past") => {
+  const response = await fetch(`https://api.meetup.com/${urlname}/events?scroll=${scroll}`);
   const json = await response.json();
 
   if (json.errors) {
@@ -143,8 +143,10 @@ export const fetchAll = async () => {
   const groups = await dynamodb.scanPromise({
     TableName: process.env.ORGANIZATIONS_TABLE,
     FilterExpression: "#s = :source",
+    ProjectionExpression: "urlname, #r",
     ExpressionAttributeNames: {
       '#s': 'source',
+      '#r': 'region',
     },
     ExpressionAttributeValues: {
       ':source': 'meetup',
@@ -153,7 +155,7 @@ export const fetchAll = async () => {
 
   const asyncs = groups.Items.map(async (group : IGroup) => {
     try {
-      return await fetchOrganizationMeetupEvents(group.meetup_id, group.region, "next_upcoming");
+      return await fetchOrganizationMeetupEvents(group.urlname, group.region, "next_upcoming");
     } catch (error) {
       console.error(error);
       return [];
