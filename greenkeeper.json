@@ -1,0 +1,14 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "app-backend/package.json",
+        "app-frontend/package.json",
+        "dynamodb/package.json",
+        "facebook-events-email/package.json",
+        "lambdas/package.json",
+        "proxy/package.json"
+      ]
+    }
+  }
+}
