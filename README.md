@@ -1,5 +1,7 @@
 # Goals
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/aizatto/build.my.svg)](https://greenkeeper.io/)
+
 - Build a low cost community event aggregator
 - Experiment with Technologies
   - AWS DynamoDB
