@@ -34,7 +34,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.4.6:
+bluebird@^3.0.6, bluebird@^3.4.6:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
   integrity sha512-/qKPUQlaW1OyR51WeCPBvRnAlnZFUJkCSG5HzGnuIqhgyJtF+T94lFnn33eiazjRm2LAHVy2guNnaq48X9SJuw==
@@ -61,7 +61,7 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-dynamodb-localhost@^0.0.5:
+dynamodb-localhost@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/dynamodb-localhost/-/dynamodb-localhost-0.0.5.tgz#2dfcd5c0ac83e534327f5d5da5dada8d31310755"
   integrity sha1-LfzVwKyD5TQyf11dpdrajTExB1U=
@@ -70,6 +70,14 @@ dynamodb-localhost@^0.0.5:
     progress "^1.1.8"
     rmdir "^1.2.0"
     tar "^2.0.0"
+
+dynamodb-migrations@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/dynamodb-migrations/-/dynamodb-migrations-0.0.10.tgz#3b2240997a9db0423aeb0daccef12ea428c728a1"
+  integrity sha1-OyJAmXqdsEI66w2szvEupCjHKKE=
+  dependencies:
+    bluebird "^3.0.6"
+    mkdirp "^0.5.0"
 
 events@1.1.1:
   version "1.1.1"
@@ -241,15 +249,18 @@ sax@>=0.6.0:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-serverless-dynamodb-local@0.2.30:
-  version "0.2.30"
-  resolved "https://registry.yarnpkg.com/serverless-dynamodb-local/-/serverless-dynamodb-local-0.2.30.tgz#3b6de306a318600d7844605f7e650974a9e0c11f"
-  integrity sha512-dEeyfrDmXWM6KEqofVPuqVraZTenhlOjAsDjVrr2Kecq/mJs4FxeoDq9X/UriuZLENNzAAVX4BRt1HTX/JdRGg==
+serverless-dynamodb-local@0.2.36:
+  version "0.2.36"
+  resolved "https://registry.yarnpkg.com/serverless-dynamodb-local/-/serverless-dynamodb-local-0.2.36.tgz#367603ed4feb15c8a4ab51e4018a7524b1a68736"
+  integrity sha512-0OqUg1du6mZZYgZOkxFETboHQKlIFVygewyh1PY4R5Oafv5vidY6SOupl30yFQR7DtRDqgO3JaciPmJK81MNDA==
   dependencies:
     aws-sdk "^2.7.0"
     bluebird "^3.4.6"
-    dynamodb-localhost "^0.0.5"
+    dynamodb-localhost "0.0.5"
+    dynamodb-migrations "0.0.10"
     lodash "^4.17.0"
+    mkdirp "^0.5.0"
+    tar "^2.0.0"
 
 tar@^2.0.0:
   version "2.2.1"
