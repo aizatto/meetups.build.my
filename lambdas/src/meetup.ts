@@ -110,6 +110,7 @@ function mapMeetupEventToDynamoDBItem({ region }, event) {
     description: event.description,
     link: event.link,
     source: "meetup",
+    source_id: event.id,
     meetup_id: event.id,
     id,
     start_time: start_time.toISOString(),
@@ -137,6 +138,17 @@ export const fetchOrganizationMeetupEvents = async (urlname: string, region : st
     mapMeetupEventToDynamoDBItem({ region }, event)
   );
 };
+
+export const fetchMeetupEvent = async (url: string, region: string) => {
+  const response = await fetch(url);
+  const json = await response.json();
+
+  if (json.errors) {
+    throw new Error(handleMeetupResponseErrors(json));
+  }
+
+  return mapMeetupEventToDynamoDBItem({ region }, json)
+}
 
 export const fetchAll = async () => {
   // TODO look at using index

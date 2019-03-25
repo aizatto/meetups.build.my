@@ -57,6 +57,8 @@ functions:
           - "arn:aws:ssm:${opt:region}:*:parameter/build.my/${opt:stage}/FACEBOOK_ACCESS_TOKEN"
   meetupOrganization:
     handler: src/handler.meetupOrganization
+  meetupEvent:
+    handler: src/handler.meetupEvent
   meetupAllOrganizations:
     handler: src/handler.meetupAllOrganizations
     events:

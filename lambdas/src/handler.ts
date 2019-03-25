@@ -3,6 +3,7 @@ import { fetchFacebookOrganizationEvents } from './facebook';
 import {
   fetchAll as fetchAllMeetupOrganizations,
   fetchMeetupOrganization,
+  fetchMeetupEvent,
   fetchOrganizationMeetupEvents,
 } from './meetup';
 import { writeBatchItems, writeBatchTables } from './utils';
@@ -36,6 +37,25 @@ export const meetupAllOrganizations: APIGatewayProxyHandler = async () => {
     statusCode: 200,
     body: JSON.stringify({
       results,
+    }),
+  };
+}
+
+export const meetupEvent : APIGatewayProxyHandler = async (event: any) => {
+  const {
+    url,
+    region,
+  } = event;
+  const result = await fetchMeetupEvent(url, region);
+  const response = await writeBatchItems(
+    process.env.EVENTS_TABLE,
+    [result],
+  );
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      response
     }),
   };
 }
