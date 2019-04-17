@@ -18,3 +18,17 @@ Changes:
 # Notes
 
 - https://serverless.com/framework/docs/providers/aws/guide/variables/#reference-cloudformation-outputs
+
+# To Recreate
+
+```sh
+serverless create --template aws-nodejs --path aws-dynamodb
+```
+
+```sh
+yarn add --dev serverless-dynamodb-local@0.2.30
+```
+
+- Create `table.js`
+- Update `serverless.yml`
+  - Rename `service`
