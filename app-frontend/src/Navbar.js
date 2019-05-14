@@ -42,6 +42,9 @@ class Navbar extends Component {
               <NavLink href="https://www.deepthoughtapp.com/">Deep Thought</NavLink>
             </NavItem>
             <NavItem>
+              <NavLink href="https://www.logbook.my/">Logbook</NavLink>
+            </NavItem>
+            <NavItem>
               <NavLink href="https://github.com/aizatto/build.my">GitHub</NavLink>
             </NavItem>
             <NavItem>
