@@ -2,7 +2,7 @@
   "dependencies": {
     "@types/aws-lambda": "^8.10.19",
     "@types/node": "^11.9.5",
-    "aws-sdk": "^2.411.0",
+    "aws-sdk": "^2.814.0",
     "date-fns": "^1.30.1",
     "fb": "^2.0.0",
     "ical-date-parser": "^4.0.0",
