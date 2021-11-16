@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "aws-sdk": "^2.409.0",
+    "aws-sdk": "^2.814.0",
     "btoa": "^1.2.1",
     "ical-date-parser": "^4.0.0",
     "ical2json": "^1.2.0",
