@@ -7,7 +7,7 @@
     "fb": "^2.0.0",
     "ical-date-parser": "^4.0.0",
     "ical2json": "^1.2.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.7",
     "serverless-iam-roles-per-function": "^1.0.4",
     "typescript": "^3.3.3333",
     "underscore": "^1.9.1"
