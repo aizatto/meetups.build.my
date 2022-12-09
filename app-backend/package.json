@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-graphql": "^0.7.1",
     "fb": "^2.0.0",
     "global": "^4.3.2",
