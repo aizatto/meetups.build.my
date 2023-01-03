@@ -12,7 +12,7 @@
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-relay": "^2.0.0",
-    "react-scripts": "2.1.5",
+    "react-scripts": "5.0.1",
     "reactstrap": "^7.1.0",
     "relay-compiler": "^2.0.0",
     "underscore": "^1.9.1"
